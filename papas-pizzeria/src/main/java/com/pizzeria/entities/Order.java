@@ -9,7 +9,7 @@ import lombok.*;
 public class Order {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ido;
 	private String additionalInfo;
 	
