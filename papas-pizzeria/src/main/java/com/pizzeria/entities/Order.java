@@ -1,5 +1,7 @@
 package com.pizzeria.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,9 @@ public class Order {
 	private int ido;
 	private String additionalInfo;
 	
-//	@OneToMany(mappedBy = "client")
-//	private Client client;
+	@ManyToOne
+	private Client client;
+	
+	@ManyToMany
+	private List<Dish> dishes;
 }
