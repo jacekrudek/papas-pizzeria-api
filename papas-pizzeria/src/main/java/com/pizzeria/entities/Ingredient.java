@@ -10,10 +10,9 @@ public class Ingredient {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idingr;
-    private String ingrDescription;
+    private int idi;
+    private String ingDesc;
 
-    // Klasa Dish powinna zawierac skladniki, nie na odwrot
     //@ManyToMany(mappedBy = "dishes")
     //private Dish dish;
 }

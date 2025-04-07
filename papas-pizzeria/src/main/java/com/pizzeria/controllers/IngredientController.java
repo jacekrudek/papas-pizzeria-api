@@ -22,7 +22,7 @@ public class IngredientController {
     public @ResponseBody String addIngredient(@RequestBody Ingredient ingredient) {
         ingredient = ingredientRepo.save(ingredient);
 
-        return "Added Ingredient with id=" + ingredient.getIdingr();
+        return "Added Ingredient with id=" + ingredient.getIdi();
     }
 
     @GetMapping
