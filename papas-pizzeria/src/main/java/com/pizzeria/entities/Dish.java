@@ -21,4 +21,7 @@ public class Dish {
 	@ManyToMany(mappedBy = "dishes")
 	@JsonIgnore
     private List<Order> orders;
+	
+	@ManyToMany
+    private List<Ingredient> ingredients;
 }
