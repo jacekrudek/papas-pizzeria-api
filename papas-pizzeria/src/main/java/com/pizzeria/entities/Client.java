@@ -20,5 +20,5 @@ public class Client {
 	
 	@OneToMany(mappedBy="client", cascade=CascadeType.ALL)
 	@JsonIgnore
-	List<Order> orders;
+	private List<Order> orders;
 }

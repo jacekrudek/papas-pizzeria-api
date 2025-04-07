@@ -1,5 +1,7 @@
 package com.pizzeria.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,5 +16,8 @@ public class Order {
 	private String additionalInfo;
 	
 	@ManyToOne
-	Client client;
+	private Client client;
+	
+	@ManyToMany
+	private List<Dish> dishes;
 }

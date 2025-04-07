@@ -9,3 +9,4 @@ INSERT INTO ingredients (ing_desc) VALUES ('homemade buns freshly baked in our s
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('spadzetti', 29.90);
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('kotlecik schabowy', 24.30);
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('szuszi', 38.50);
+INSERT INTO orders_dishes (orders_ido, dishes_idd) VALUES (1, 1), (1, 2), (2, 3), (3, 2); 
