@@ -1,5 +1,9 @@
 package com.pizzeria.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,4 +17,8 @@ public class Client {
 	private int idc;
 	private String name;
 	private int tableNumber;
+	
+	@OneToMany(mappedBy="client", cascade=CascadeType.ALL)
+	@JsonIgnore
+	List<Order> orders;
 }

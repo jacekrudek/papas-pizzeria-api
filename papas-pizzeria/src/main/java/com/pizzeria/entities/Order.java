@@ -13,6 +13,6 @@ public class Order {
 	private int ido;
 	private String additionalInfo;
 	
-//	@OneToMany(mappedBy = "client")
-//	private Client client;
+	@ManyToOne
+	Client client;
 }
