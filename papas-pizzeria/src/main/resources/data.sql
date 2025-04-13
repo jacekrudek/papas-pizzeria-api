@@ -21,5 +21,5 @@ INSERT INTO ingredients (ing_desc) VALUES ('cheese');
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('spadzetti', 29.90);
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('kotlecik schabowy', 24.30);
 INSERT INTO dishes (dish_description, price_per_portion) VALUES ('szuszi', 38.50);
-INSERT INTO orders_dishes (orders_ido, dishes_idd) VALUES (1, 1), (1, 2), (2, 3), (3, 2); 
+INSERT INTO orders_dishes (orders_ido, dishes_idd, quantity) VALUES (1, 1, 1), (1, 2, 3), (2, 3, 2), (3, 2, 1); 
 INSERT INTO dishes_ingredients (dishes_idd, ingredients_idi) VALUES (1, 1), (1, 4), (1, 10), (2, 5), (2, 11), (3, 12), (3, 13);
