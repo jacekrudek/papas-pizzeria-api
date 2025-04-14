@@ -20,9 +20,11 @@ public class OrderDish {
 	 @JoinColumn(name = "dishes_idd")
 	 private Dish dish;
 	 
-     @Column(name = "orders_ido", nullable = false)
-     @JsonIgnore
-     private int ido;
+	 @ManyToOne
+	 @JoinColumn(name = "orders_ido", nullable = false)
+	 @JsonIgnore
+	 private Order order;
+
 
      @Column(nullable = false)
      private int quantity;
