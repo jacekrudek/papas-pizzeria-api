@@ -18,9 +18,10 @@ public class Dish {
 	private String dishDescription;
 	private float pricePerPortion;
 	
-	@ManyToMany(mappedBy = "dishes")
 	@JsonIgnore
-    private List<Order> orders;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "dishes_idd", referencedColumnName = "idd")
+    private List<OrderDish> orderedDishes;
 	
 	@ManyToMany
     private List<Ingredient> ingredients;
