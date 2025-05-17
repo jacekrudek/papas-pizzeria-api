@@ -19,10 +19,32 @@ public class DishController {
 	DishRepository dishRepo;
 	
 	@PostMapping
-	public @ResponseBody String addDish(@RequestBody Dish dish) {
-		dish = dishRepo.save(dish);
+	public @ResponseBody String addDish(@RequestBody String descr, @RequestBody String price) {
+		Dish dish = new Dish();	
 		
-		return "Added with id=" + dish.getIdd();
+		if (descr != null && price != null) {
+			float pricePerPortion = 0;
+
+			try {
+				pricePerPortion = Float.parseFloat(price);
+			} catch (NumberFormatException e) {
+				return "Failed to add new dish with error: " + e.getMessage();
+			}
+
+			dish.setDishDescription(descr);
+			dish.setPricePerPortion(pricePerPortion);
+
+			try {
+				dish = dishRepo.save(dish);
+
+				return "Successfully added dish with id: " + dish.getIdd();
+			} catch (IllegalArgumentException e) {
+				return "Failed to add new dish with error: " + e.getMessage();
+			}
+
+		} else {		
+			return "Failed to add new dish, one or two arguments are null";
+		}
 	}
 	
 	@GetMapping
