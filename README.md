@@ -29,3 +29,5 @@ mvn spring-boot:run
 ```
 
 The app will be available under http://localhost:8080/  
+
+H2 console will be avaiable under http://localhost:8080/h2-console/ with URL `jdbc:h2:mem:testdb`
