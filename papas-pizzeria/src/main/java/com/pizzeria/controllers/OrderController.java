@@ -34,34 +34,19 @@ public class OrderController {
 	@PostMapping
 	public @ResponseBody String addOrder(@RequestBody Order order) {
 	    try {
-	        if (order.getClient() == null || order.getClient().getName() == null || order.getClient().getName().isEmpty()) {
-	            return "Failed to add order, error code: client name is required";
-	        }
-
-	        if (order.getClient().getTableNumber() < 0) {  
-	            return "Failed to add order, error code: table number cannot be negative";
-	        }
-
-	        if (order.getOrderedDishes() == null || order.getOrderedDishes().isEmpty()) {
-	            return "Failed to add order, error code: order must contain at least one dish";
-	        }
-
-	        for (OrderDish od : order.getOrderedDishes()) {
-	            if (od.getQuantity() < 1) {
-	                return "Failed to add order, error code: dish quantity cannot be lower than 1";
-	            }
-	            od.setOrder(order);
-	        }
+	    	
+	    	 for (OrderDish od : order.getOrderedDishes()) {
+	 	    	
+	 	        od.setOrder(order);
+	 	    }
 
 	        order = orderRepo.save(order);
 
-	        if (order.getClient().getTableNumber() == 0) {
-	            return "Successfully added order with id " + order.getIdo() + " [takeout]";
-	        } else {
 	            return "Successfully added order with id " + order.getIdo();
-	        }
+	        
 
 	    } catch (IllegalArgumentException e) {
+	    	
 	        return "Failed to add order, unexpected error: " + e.getMessage();
 	    }
 	}
