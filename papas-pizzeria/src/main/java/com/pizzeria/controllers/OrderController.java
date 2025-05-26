@@ -40,17 +40,22 @@ public class OrderController {
 	
 	@PostMapping
 	public @ResponseBody String addOrder(@RequestBody Order order) {
-		
-		
-	    for (OrderDish od : order.getOrderedDishes()) {
+	    try {
 	    	
-	        od.setOrder(order);
+	    	 for (OrderDish od : order.getOrderedDishes()) {
+	 	    	
+	 	        od.setOrder(order);
+	 	    }
+
+	        order = orderRepo.save(order);
+
+	            return "Successfully added order with id " + order.getIdo();
+	        
+
+	    } catch (IllegalArgumentException e) {
+	    	
+	        return "Failed to add order, unexpected error: " + e.getMessage();
 	    }
-
-	    order = orderRepo.save(order); 
-
-
-	    return "Added with id=" + order.getIdo();
 	}
 	
 	
