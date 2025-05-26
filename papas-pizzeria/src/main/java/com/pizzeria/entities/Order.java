@@ -18,8 +18,8 @@ public class Order {
 	@ManyToOne
 	private Client client;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "orders_ido", referencedColumnName = "ido")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+   // @JoinColumn(name = "orders_ido", referencedColumnName = "ido")
 	private List<OrderDish> orderedDishes;
 	
 }

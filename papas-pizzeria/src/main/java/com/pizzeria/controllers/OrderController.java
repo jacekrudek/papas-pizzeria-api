@@ -2,6 +2,7 @@ package com.pizzeria.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.pizzeria.entities.Client;
 import com.pizzeria.entities.Dish;
@@ -19,6 +22,7 @@ import com.pizzeria.entities.Order;
 import com.pizzeria.entities.OrderDish;
 import com.pizzeria.dtos.OrderDTO;
 import com.pizzeria.repos.DishRepository;
+import com.pizzeria.repos.OrderDishRepository;
 import com.pizzeria.repos.OrderRepository;
 
 @Controller
@@ -31,18 +35,52 @@ public class OrderController {
 	@Autowired
 	DishRepository dishRepo;
 	
+	@Autowired
+	OrderDishRepository orderdishRepo;
+	
 	@PostMapping
 	public @ResponseBody String addOrder(@RequestBody Order order) {
 		
+		
 	    for (OrderDish od : order.getOrderedDishes()) {
+	    	
 	        od.setOrder(order);
 	    }
 
 	    order = orderRepo.save(order); 
 
+
 	    return "Added with id=" + order.getIdo();
 	}
+	
+	
+	@DeleteMapping("/{ido}")
+	public @ResponseBody String deleteOrder(@PathVariable Integer ido) {
+	    if (orderRepo.existsById(ido)) {
+	        try {
+	            Order order = orderRepo.findById(ido)
+	                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
+	            List<OrderDish> orderedDishes = new ArrayList<>(order.getOrderedDishes());
+	            for (OrderDish od : orderedDishes) {
+	            	orderdishRepo.deleteById(od.getId());
+	            }
+
+	            orderRepo.delete(order);
+
+	            return "Succesfully deleted order with id=" + ido;
+	        } catch (IllegalArgumentException e) {
+	            return "Failed to delete order, error code: " + e.getMessage();
+	        } catch (Exception e) {
+	            return "Unexpected error while deleting order: " + e.getMessage();
+	        }
+	    }
+	    return "Failed to delete order: order with id=" + ido + " does not exist.";
+	}
+	
+	
+	
+	
 	
 	@GetMapping("/{ido}/dishes")
 	public @ResponseBody Iterable<Dish> getDishesForOrder(@PathVariable Integer ido) {
