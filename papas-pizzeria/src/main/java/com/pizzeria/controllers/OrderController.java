@@ -101,6 +101,21 @@ public class OrderController {
 		return o.getClient();
 	}
 	
+	@GetMapping("/{ido}")
+	public @ResponseBody Object getOrderById(@PathVariable Integer ido) {
+	    if (orderRepo.existsById(ido)) {
+	        try {
+	            Order order = orderRepo.findById(ido)
+	                    .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+	            return new OrderDTO(order);
+	        } catch (IllegalArgumentException e) {
+	            return "Failed to get order, error code: " + e.getMessage();
+	        }
+	    }
+	    return "Failed to get order: order with id=" + ido + " does not exist.";
+	}
+	
 	@GetMapping
 	public @ResponseBody CollectionModel<OrderDTO> getOrders() {
 		List<OrderDTO> ordersDTO = new ArrayList<>();
