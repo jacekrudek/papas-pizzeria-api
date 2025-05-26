@@ -26,7 +26,7 @@ public class OrderDTO extends RepresentationModel<OrderDTO>{
 		this.clientName = order.getClient().getName();
 		
 		for (OrderDish orderDish: order.getOrderedDishes()) {
-			dishes.add(new AbstractMap.SimpleEntry<>( orderDish.getDish().getDishDescription(), orderDish.getQuantity()));
+			this.dishes.add(new AbstractMap.SimpleEntry<>( orderDish.getDish().getDishDescription(), orderDish.getQuantity()));
 		}
 		
 		this.add(linkTo(methodOn(OrderController.class).getClientForOrder(order.getIdo())).withRel("client"));
