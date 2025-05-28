@@ -1,5 +1,7 @@
 package com.pizzeria.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pizzeria.dtos.DishDTO;
 import com.pizzeria.entities.Dish;
+import com.pizzeria.entities.Ingredient;
 import com.pizzeria.repos.DishRepository;
 import com.pizzeria.repos.IngredientRepository;
 
@@ -36,6 +39,12 @@ public class DishController {
 			_dish.setDishDescription(dishdto.getDishDescription());
 			_dish.setPricePerPortion(dishdto.getPricePerPortion());
 
+			List<Integer> ingredientIds = dishdto.getIngredients();
+			if (ingredientIds != null && !ingredientIds.isEmpty()) {
+				List<Ingredient> ingredients = (List<Ingredient>) ingRepo.findAllById(ingredientIds);
+				_dish.setIngredients(ingredients);
+			}
+			
 			try {
 				_dish = dishRepo.save(_dish);
 
