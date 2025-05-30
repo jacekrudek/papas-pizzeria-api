@@ -21,6 +21,8 @@ import com.pizzeria.entities.Dish;
 import com.pizzeria.entities.Order;
 import com.pizzeria.entities.OrderDish;
 import com.pizzeria.dtos.OrderDTO;
+import com.pizzeria.dtos.OrderUpdateDTO;
+import com.pizzeria.repos.ClientRepository;
 import com.pizzeria.repos.DishRepository;
 import com.pizzeria.repos.OrderDishRepository;
 import com.pizzeria.repos.OrderRepository;
@@ -31,6 +33,9 @@ public class OrderController {
 
 	@Autowired
 	OrderRepository orderRepo;	
+	
+	@Autowired
+	ClientRepository clientRepo;	
 	
 	@Autowired
 	DishRepository dishRepo;
@@ -85,8 +90,6 @@ public class OrderController {
 	
 	
 	
-	
-	
 	@GetMapping("/{ido}/dishes")
 	public @ResponseBody Iterable<Dish> getDishesForOrder(@PathVariable Integer ido) {
 		Order o = orderRepo.findById(ido).orElse(null);
@@ -120,6 +123,59 @@ public class OrderController {
 	    }
 	    return "Failed to get order: order with id=" + ido + " does not exist.";
 	}
+	
+	@PutMapping("/{ido}")
+	public @ResponseBody String updateOrder(@PathVariable Integer ido, @RequestBody OrderUpdateDTO orderupdateDTO) {
+		    if (orderRepo.existsById(ido)) {
+		        Order order = orderRepo.findById(ido).get();
+		        
+		        try {
+		            Integer clientId = orderupdateDTO.getClientId();
+		            if (clientId != null) {
+		                if (clientRepo.existsById(clientId)) {
+		                    order.setClient(clientRepo.findById(clientId).get());
+		                } else {
+		                    return "Failed to update order: client with ID " + clientId + " does not exist.";
+		                }
+		            }
+		            
+		            String newInfo = orderupdateDTO.getAdditionalInfo();
+		            if (newInfo != null) {
+		                order.setAdditionalInfo(newInfo);
+		            }
+
+		            if (orderupdateDTO.getOrderedDishes() != null && !orderupdateDTO.getOrderedDishes().isEmpty()) {
+		             
+		                List<OrderDish> existingOrderDishes = new ArrayList<>(order.getOrderedDishes());
+		                for (OrderDish od : existingOrderDishes) {
+		                    orderdishRepo.deleteById(od.getId());
+		                }
+		                order.getOrderedDishes().clear();
+
+		                for (OrderUpdateDTO.OrderedDishDTO odDTO : orderupdateDTO.getOrderedDishes()) {
+		                    if (dishRepo.existsById(odDTO.getDishId())) {
+		                        Dish dish = dishRepo.findById(odDTO.getDishId()).get();
+		                        OrderDish newOrderDish = new OrderDish();
+		                        newOrderDish.setDish(dish);
+		                        newOrderDish.setOrder(order);
+		                        newOrderDish.setQuantity(odDTO.getQuantity());
+		                        order.getOrderedDishes().add(orderdishRepo.save(newOrderDish));
+		                    }
+		                }
+		            }
+
+		            order = orderRepo.findById(ido).get();
+		            orderRepo.save(order);
+		        } catch (IllegalArgumentException e) {
+		            return "Failed to update the order with error: " + e.getMessage();
+		        }
+
+		        return "Successfully updated the order with ID: " + order.getIdo();
+		    }
+
+		    return "Failed to update order: Order with given ID doesn't exist.";
+		}
+	
 	
 	@GetMapping
 	public @ResponseBody CollectionModel<OrderDTO> getOrders() {

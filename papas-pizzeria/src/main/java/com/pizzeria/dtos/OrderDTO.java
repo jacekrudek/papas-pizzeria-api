@@ -9,6 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pizzeria.controllers.OrderController;
 import com.pizzeria.entities.Order;
 import com.pizzeria.entities.OrderDish;
@@ -16,6 +17,8 @@ import com.pizzeria.entities.OrderDish;
 import lombok.*;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class OrderDTO extends RepresentationModel<OrderDTO>{
 	
 	public OrderDTO(Order order) {
@@ -37,4 +40,5 @@ public class OrderDTO extends RepresentationModel<OrderDTO>{
 	private String clientName;
 	private String additionalInfo;
 	private List<AbstractMap.SimpleEntry<String, Integer>> dishes = new ArrayList<>();
+	
 }
