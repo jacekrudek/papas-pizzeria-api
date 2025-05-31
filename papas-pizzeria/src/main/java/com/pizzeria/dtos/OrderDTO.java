@@ -37,4 +37,5 @@ public class OrderDTO extends RepresentationModel<OrderDTO>{
 	private String clientName;
 	private String additionalInfo;
 	private List<AbstractMap.SimpleEntry<String, Integer>> dishes = new ArrayList<>();
+	
 }
