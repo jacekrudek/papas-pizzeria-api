@@ -15,6 +15,6 @@ public class OrderUpdateDTO extends RepresentationModel<OrderUpdateDTO>{
 	
     private String additionalInfo;
 
-    private List<OrderDishDTO> orderedDishes = new ArrayList<>();
+    private List<OrderDishDTO> orderedDishes;
     
 }
