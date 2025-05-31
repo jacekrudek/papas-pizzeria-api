@@ -7,10 +7,16 @@ import lombok.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 @Table(name = "orders_dishes")
 public class OrderDish {
+		
+	public OrderDish(Dish dish, int dishQuantity, Order order) {
+		this.dish = dish;
+		this.quantity = dishQuantity;
+		this.order = order;
+	}
 	
-
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 @JsonIgnore

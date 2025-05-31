@@ -2,7 +2,6 @@ package com.pizzeria.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -21,6 +20,7 @@ import com.pizzeria.entities.Dish;
 import com.pizzeria.entities.Order;
 import com.pizzeria.entities.OrderDish;
 import com.pizzeria.dtos.OrderDTO;
+import com.pizzeria.dtos.OrderDishDTO;
 import com.pizzeria.dtos.OrderUpdateDTO;
 import com.pizzeria.repos.ClientRepository;
 import com.pizzeria.repos.DishRepository;
@@ -146,25 +146,26 @@ public class OrderController {
 
 		            if (orderupdateDTO.getOrderedDishes() != null && !orderupdateDTO.getOrderedDishes().isEmpty()) {
 		             
-		                List<OrderDish> existingOrderDishes = new ArrayList<>(order.getOrderedDishes());
-		                for (OrderDish od : existingOrderDishes) {
+		                for (OrderDish od : order.getOrderedDishes()) {
 		                    orderdishRepo.deleteById(od.getId());
 		                }
 		                order.getOrderedDishes().clear();
 
-		                for (OrderUpdateDTO.OrderedDishDTO odDTO : orderupdateDTO.getOrderedDishes()) {
-		                    if (dishRepo.existsById(odDTO.getDishId())) {
-		                        Dish dish = dishRepo.findById(odDTO.getDishId()).get();
-		                        OrderDish newOrderDish = new OrderDish();
-		                        newOrderDish.setDish(dish);
-		                        newOrderDish.setOrder(order);
-		                        newOrderDish.setQuantity(odDTO.getQuantity());
-		                        order.getOrderedDishes().add(orderdishRepo.save(newOrderDish));
-		                    }
+		                for (OrderDishDTO odDTO : orderupdateDTO.getOrderedDishes()) {
+		                			                	
+		                	Dish dish = dishRepo.findById(odDTO.getDishId()).orElse(null);
+		                	if (dish != null)
+		                	{		                	
+			                	OrderDish newOd = new OrderDish(dish, odDTO.getQuantity(), order);	
+			                	orderdishRepo.save(newOd);
+			                	order.getOrderedDishes().add(newOd);
+		                	}
+		                	else {
+		                		return "Dish with ID " + odDTO.getDishId() + "not found";
+		                	}
 		                }
 		            }
 
-		            order = orderRepo.findById(ido).get();
 		            orderRepo.save(order);
 		        } catch (IllegalArgumentException e) {
 		            return "Failed to update the order with error: " + e.getMessage();
