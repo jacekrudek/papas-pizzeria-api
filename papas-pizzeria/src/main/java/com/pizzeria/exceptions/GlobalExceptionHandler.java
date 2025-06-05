@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,5 +31,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body("Error 400: Invalid order ID format. Must be an integer.");
     }
 
-    
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<String> handleNotFound(NoHandlerFoundException ex) {
+        return ResponseEntity.status(404).body("Error 404: The requested path does not exist.");
+    }
 }
