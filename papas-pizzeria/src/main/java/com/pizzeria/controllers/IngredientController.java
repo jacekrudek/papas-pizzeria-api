@@ -22,6 +22,12 @@ public class IngredientController {
 
     @PostMapping
     public @ResponseBody String addIngredient(@RequestBody Ingredient ingredient) {
+    	
+    	if (ingredient.getIngDesc() == null || ingredient.getIngDesc().strip() == "") {
+    		
+    		return "the ingredient description must be provided";
+    	}
+    	
         ingredient = ingredientRepo.save(ingredient);
 
         return "Added Ingredient with id=" + ingredient.getIdi();
