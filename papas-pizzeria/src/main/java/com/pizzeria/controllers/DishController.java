@@ -34,6 +34,10 @@ public class DishController {
 	public @ResponseBody String addDish(@RequestBody DishDTO dishdto) {
 		Dish _dish = new Dish();
 		
+		if (dishdto.getIngredients() == null) {
+				return "Failed to add new dish: ingredient ID list must be provided";
+			}
+
 		if ((dishdto.getDishDescription() != null) && (dishdto.getPricePerPortion() > 0)) {
 
 			_dish.setDishDescription(dishdto.getDishDescription());
@@ -70,12 +74,13 @@ public class DishController {
 				if (tmpDescr != null) { _dish.setDishDescription(tmpDescr); }
 				if (tmpPrice > 0) { _dish.setPricePerPortion(tmpPrice); }
 
-				if (dishdto.getIngredients().size() > 0) {
+				if (dishdto.getIngredients() != null) {
 					_dish.getIngredients().clear();
-
-					for (Integer ingId : dishdto.getIngredients()) {
-						if (ingRepo.existsById(ingId)) {
-							_dish.getIngredients().add(ingRepo.findById(ingId).get());
+					if (_dish.getIngredients().isEmpty()) {
+						for (Integer ingId : dishdto.getIngredients()) {
+							if (ingRepo.existsById(ingId)) {
+								_dish.getIngredients().add(ingRepo.findById(ingId).get());
+							}
 						}
 					}
 				}

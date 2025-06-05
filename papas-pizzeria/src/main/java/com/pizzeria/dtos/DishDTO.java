@@ -3,7 +3,6 @@ package com.pizzeria.dtos;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
@@ -21,7 +20,8 @@ public class DishDTO extends RepresentationModel<DishDTO> {
     
     private String dishDescription;
     private float pricePerPortion = 0;
-    private List<Integer> ingredients = new ArrayList<>();
+    
+    private List<Integer> ingredients;
 
     public DishDTO(Dish dish) {
         super();
