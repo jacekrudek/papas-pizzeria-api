@@ -27,6 +27,8 @@ import com.pizzeria.repos.DishRepository;
 import com.pizzeria.repos.OrderDishRepository;
 import com.pizzeria.repos.OrderRepository;
 
+import jakarta.validation.Valid;
+
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
@@ -44,14 +46,19 @@ public class OrderController {
 	OrderDishRepository orderdishRepo;
 	
 	@PostMapping
-	public @ResponseBody String addOrder(@RequestBody Order order) {
+	public @ResponseBody String addOrder(@Valid @RequestBody Order order) {
+		
+		if (order.getOrderedDishes() == null) {        
+			return "The orderedDishes field is required";
+		}
+		
 	    try {
 	    	
 	    	 for (OrderDish od : order.getOrderedDishes()) {
 	 	    	
 	 	        od.setOrder(order);
 	 	    }
-
+	    	 
 	        order = orderRepo.save(order);
 
 	            return "Successfully added order with id " + order.getIdo();
@@ -125,7 +132,7 @@ public class OrderController {
 	}
 	
 	@PutMapping("/{ido}")
-	public @ResponseBody String updateOrder(@PathVariable Integer ido, @RequestBody OrderUpdateDTO orderupdateDTO) {
+	public @ResponseBody String updateOrder(@PathVariable Integer ido, @Valid @RequestBody OrderUpdateDTO orderupdateDTO) {
 		    if (orderRepo.existsById(ido)) {
 		        Order order = orderRepo.findById(ido).get();
 		        
@@ -188,4 +195,5 @@ public class OrderController {
 		
 		return CollectionModel.of(ordersDTO);
 	}
+	
 }
